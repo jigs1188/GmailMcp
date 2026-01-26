@@ -6,14 +6,14 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install ALL dependencies (including dev for build)
-RUN npm ci
+# Install ALL dependencies including dev
+RUN npm ci --include=dev
 
 # Copy source files
 COPY src/ ./src/
 
-# Build TypeScript
-RUN npx tsc
+# Build TypeScript using local typescript
+RUN ./node_modules/.bin/tsc
 
 # Remove dev dependencies to reduce image size
 RUN npm prune --omit=dev
