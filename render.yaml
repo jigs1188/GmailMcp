@@ -1,0 +1,21 @@
+services:
+  - type: worker
+    name: gmail-mcp
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GMAIL_CLIENT_ID
+        sync: false
+      - key: GMAIL_CLIENT_SECRET
+        sync: false
+      - key: GMAIL_REFRESH_TOKEN
+        sync: false
+      - key: GMAIL_USER_EMAIL
+        sync: false
+      - key: MAX_EMAILS_PER_HOUR
+        value: "10"
+      - key: MAX_EMAILS_PER_DAY
+        value: "50"

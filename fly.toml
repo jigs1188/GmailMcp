@@ -1,0 +1,13 @@
+app = "gmail-mcp"
+primary_region = "iad"
+
+[build]
+  builder = "heroku/buildpacks:20"
+
+[env]
+  NODE_ENV = "production"
+  MAX_EMAILS_PER_HOUR = "10"
+  MAX_EMAILS_PER_DAY = "50"
+
+[processes]
+  app = "node dist/server.js"
