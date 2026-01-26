@@ -3,7 +3,7 @@
     "name": "gmail-mcp-server",
     "title": "Gmail MCP Server",
     "description": "Send emails via Gmail using MCP (Model Context Protocol). Works with ChatGPT, Claude, Cursor, and other AI assistants. Compose, send, and manage emails directly through AI conversation.",
-    "version": "1.0.0",
+    "version": "1.0",
     "buildTag": "latest",
     "meta": {
         "templateId": "js-start"

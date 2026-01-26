@@ -1,13 +1,22 @@
 FROM apify/actor-node:20
 
+WORKDIR /app
+
 # Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --only=production --omit=dev
+# Install ALL dependencies (including dev for build)
+RUN npm ci
 
-# Copy built files
-COPY dist/ ./dist/
+# Copy source files
+COPY src/ ./src/
 
-# Run the MCP server in standby mode
+# Build TypeScript
+RUN npx tsc
+
+# Remove dev dependencies to reduce image size
+RUN npm prune --omit=dev
+
+# Run the MCP server
 CMD ["node", "dist/server.js"]
