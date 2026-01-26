@@ -20,8 +20,10 @@
 import { google } from 'googleapis';
 import * as readline from 'readline';
 
-const SCOPES = ['https://www.googleapis.com/auth/gmail.send'];
-
+const SCOPES = [
+  'https://www.googleapis.com/auth/gmail.send',
+  'https://www.googleapis.com/auth/gmail.readonly'
+];
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout

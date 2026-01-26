@@ -1,0 +1,51 @@
+{
+    "title": "Gmail MCP Server",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "gmailClientId": {
+            "title": "Gmail Client ID",
+            "type": "string",
+            "description": "Your Gmail OAuth Client ID from Google Cloud Console",
+            "editor": "textfield",
+            "isSecret": true
+        },
+        "gmailClientSecret": {
+            "title": "Gmail Client Secret", 
+            "type": "string",
+            "description": "Your Gmail OAuth Client Secret",
+            "editor": "textfield",
+            "isSecret": true
+        },
+        "gmailRefreshToken": {
+            "title": "Gmail Refresh Token",
+            "type": "string",
+            "description": "Your Gmail OAuth Refresh Token (get it by running auth script locally first)",
+            "editor": "textfield",
+            "isSecret": true
+        },
+        "gmailUserEmail": {
+            "title": "Gmail Email Address",
+            "type": "string",
+            "description": "Your Gmail email address that will send emails",
+            "editor": "textfield"
+        },
+        "maxEmailsPerHour": {
+            "title": "Max Emails Per Hour",
+            "type": "integer",
+            "description": "Rate limit: maximum emails per hour",
+            "default": 10,
+            "minimum": 1,
+            "maximum": 50
+        },
+        "maxEmailsPerDay": {
+            "title": "Max Emails Per Day",
+            "type": "integer",
+            "description": "Rate limit: maximum emails per day",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 200
+        }
+    },
+    "required": ["gmailClientId", "gmailClientSecret", "gmailRefreshToken", "gmailUserEmail"]
+}

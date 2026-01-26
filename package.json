@@ -1,10 +1,10 @@
 {
-  "name": "mcp-email-server",
+  "name": "gmail-mcp-server",
   "version": "2.0.0",
-  "description": "MCP server for sending emails via Gmail API",
+  "description": "MCP server for sending emails via Gmail API. Works with ChatGPT, Claude, Cursor.",
   "main": "dist/server.js",
   "bin": {
-    "mcp-email-server": "dist/server.js"
+    "gmail-mcp-server": "dist/server.js"
   },
   "type": "module",
   "scripts": {
@@ -18,12 +18,17 @@
     "mcp",
     "email",
     "gmail",
-    "automation"
+    "automation",
+    "apify",
+    "actor",
+    "chatgpt",
+    "claude"
   ],
-  "author": "",
+  "author": "Jigs Parmar",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "apify": "^3.5.3",
     "googleapis": "^144.0.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"

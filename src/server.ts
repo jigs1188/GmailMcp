@@ -433,13 +433,38 @@ server.tool(
 // ============================================================================
 
 async function main() {
+  // Check if running on Apify
+  const isApify = !!process.env.APIFY_TOKEN || !!process.env.APIFY_ACTOR_ID;
+  
+  if (isApify) {
+    console.log('Running on Apify platform...');
+    
+    // Dynamic import Apify SDK only when on Apify
+    const { Actor } = await import('apify');
+    await Actor.init();
+    
+    // Get input from Apify
+    const input = await Actor.getInput() as Record<string, unknown> | null;
+    
+    if (input) {
+      // Set environment variables from Actor input
+      if (input.gmailClientId) process.env.GMAIL_CLIENT_ID = String(input.gmailClientId);
+      if (input.gmailClientSecret) process.env.GMAIL_CLIENT_SECRET = String(input.gmailClientSecret);
+      if (input.gmailRefreshToken) process.env.GMAIL_REFRESH_TOKEN = String(input.gmailRefreshToken);
+      if (input.gmailUserEmail) process.env.GMAIL_USER_EMAIL = String(input.gmailUserEmail);
+      if (input.maxEmailsPerHour) process.env.MAX_EMAILS_PER_HOUR = String(input.maxEmailsPerHour);
+      if (input.maxEmailsPerDay) process.env.MAX_EMAILS_PER_DAY = String(input.maxEmailsPerDay);
+    }
+    
+    console.log('Apify Actor initialized, starting MCP server...');
+  }
+
   console.error('Gmail MCP Server v2.0 starting...');
 
   const configValid = validateConfig();
   if (!configValid) {
     console.error('WARNING: Configuration is invalid. Gmail features will not work.');
-    console.error('Please create a .env file with your Gmail credentials.');
-    console.error('See .env.example for the required format.');
+    console.error('Please provide Gmail credentials via Actor input or .env file.');
   }
 
   // Create stdio transport
@@ -449,6 +474,11 @@ async function main() {
   await server.connect(transport);
 
   console.error('Gmail MCP Server is running!');
+  
+  // Keep alive for Apify standby mode
+  if (isApify) {
+    console.log('MCP Server ready for connections via Apify Standby mode');
+  }
 }
 
 main().catch((error) => {

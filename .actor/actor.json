@@ -1,0 +1,36 @@
+{
+    "actorSpecification": 1,
+    "name": "gmail-mcp-server",
+    "title": "Gmail MCP Server",
+    "description": "Send emails via Gmail using MCP (Model Context Protocol). Works with ChatGPT, Claude, Cursor, and other AI assistants. Compose, send, and manage emails directly through AI conversation.",
+    "version": "1.0.0",
+    "buildTag": "latest",
+    "meta": {
+        "templateId": "js-start"
+    },
+    "input": "./input_schema.json",
+    "dockerfile": "./Dockerfile",
+    "storages": {
+        "dataset": {
+            "actorSpecification": 1,
+            "title": "Sent Emails Log",
+            "views": {
+                "emails": {
+                    "title": "Sent Emails",
+                    "transformation": {
+                        "fields": ["to", "subject", "sentAt", "success", "messageId"]
+                    },
+                    "display": {
+                        "component": "table",
+                        "properties": {
+                            "to": { "label": "Recipient", "format": "text" },
+                            "subject": { "label": "Subject", "format": "text" },
+                            "sentAt": { "label": "Sent At", "format": "datetime" },
+                            "success": { "label": "Status", "format": "boolean" }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

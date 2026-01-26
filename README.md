@@ -1,6 +1,8 @@
 # Gmail MCP Server
 
-A general-purpose Model Context Protocol (MCP) server for sending emails via Gmail API. Works with ChatGPT, Claude, and other MCP-compatible AI assistants.
+A general-purpose Model Context Protocol (MCP) server for sending emails via Gmail API. Works with ChatGPT, Claude, Cursor, and other MCP-compatible AI assistants.
+
+**🚀 Deploy on Apify and get paid when people use your Actor!**
 
 ## Features
 
@@ -9,62 +11,44 @@ A general-purpose Model Context Protocol (MCP) server for sending emails via Gma
 - **Bulk Sending**: Send to multiple recipients with personalization
 - **CC/BCC Support**: Full email header support
 - **Rate Limiting**: Built-in protection (10/hour, 50/day)
-- **Easy Deployment**: Deploy to cloud, no local laptop needed
-
-## Quick Start
-
-### 1. Install & Build
-
-```bash
-npm install
-npm run build
-```
-
-### 2. Get Gmail Credentials
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create project → Enable **Gmail API**
-3. Create **OAuth 2.0 Client ID** (Web application)
-4. Add redirect URI: `https://developers.google.com/oauthplayground`
-5. Run `npm run auth` to get your refresh token
-
-### 3. Configure
-
-Create `.env` file:
-
-```env
-GMAIL_CLIENT_ID=your_client_id
-GMAIL_CLIENT_SECRET=your_client_secret
-GMAIL_REFRESH_TOKEN=your_refresh_token
-GMAIL_USER_EMAIL=your_email@gmail.com
-MAX_EMAILS_PER_HOUR=10
-MAX_EMAILS_PER_DAY=50
-```
-
-### 4. Run
-
-```bash
-npm start
-```
+- **Monetization**: Publish on Apify Store and earn money
 
 ---
 
-## Available Tools
+## 🎯 Deployment Options
 
-| Tool | Description |
-|------|-------------|
-| `send_email` | Send email to one or more recipients |
-| `compose_and_send` | Describe intent, AI composes and sends |
-| `send_bulk_emails` | Send same email to multiple people |
-| `check_email_status` | Check rate limits |
-| `verify_connection` | Test Gmail connection |
-| `schedule_reminder` | Save email draft for later |
+### Option 1: Apify (Recommended - Get Paid!)
 
----
+Apify hosts your MCP server AND lets you monetize it.
 
-## Deployment Options (No Laptop Required)
+1. **Install Apify CLI**
+   ```bash
+   npm install -g apify-cli
+   apify login
+   ```
 
-### Option 1: Railway (Recommended - Easiest)
+2. **Deploy to Apify**
+   ```bash
+   npm run build
+   apify push
+   ```
+
+3. **Configure on Apify Console**
+   - Go to your Actor settings
+   - Add environment variables (Gmail credentials)
+   - Enable "Standby" mode for 24/7 availability
+
+4. **Your MCP URL**
+   ```
+   https://mcp.apify.com/?actors=YOUR_USERNAME/gmail-mcp-server
+   ```
+
+5. **Monetize**
+   - Publish to Apify Store
+   - Set your pricing
+   - Earn when others use it!
+
+### Option 2: Smithery
 
 1. **Push to GitHub**
    ```bash
