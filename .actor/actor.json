@@ -1,8 +1,8 @@
 {
     "actorSpecification": 1,
     "name": "gmail-mcp-server",
-    "title": "Gmail MCP Server",
-    "description": "Send emails via Gmail using MCP (Model Context Protocol). Works with ChatGPT, Claude, Cursor, and other AI assistants. Compose, send, and manage emails directly through AI conversation.",
+    "title": "Gmail MCP Server - Send Emails from AI",
+    "description": "Send emails directly from ChatGPT, Claude, Cursor & any AI assistant via MCP. Just say 'send email to...' and it sends! Secure Gmail API integration with rate limiting. Perfect for AI-powered email automation.",
     "version": "1.0",
     "buildTag": "latest",
     "meta": {
@@ -10,6 +10,9 @@
     },
     "input": "./input_schema.json",
     "dockerfile": "./Dockerfile",
+    "categories": ["AI", "AUTOMATION", "COMMUNICATION"],
+    "seoTitle": "Gmail MCP Server - Send Emails from ChatGPT, Claude & AI Assistants",
+    "seoDescription": "Send emails using natural language from any AI assistant. Works with ChatGPT, Claude, Cursor via MCP protocol. Say 'send email to John about the meeting' and it sends instantly from your Gmail!",
     "storages": {
         "dataset": {
             "actorSpecification": 1,

@@ -454,30 +454,121 @@ async function main() {
       if (input.gmailUserEmail) process.env.GMAIL_USER_EMAIL = String(input.gmailUserEmail);
       if (input.maxEmailsPerHour) process.env.MAX_EMAILS_PER_HOUR = String(input.maxEmailsPerHour);
       if (input.maxEmailsPerDay) process.env.MAX_EMAILS_PER_DAY = String(input.maxEmailsPerDay);
+      console.log('Loaded credentials from Actor input');
     }
     
-    console.log('Apify Actor initialized, starting MCP server...');
-  }
+    console.log('Apify Actor initialized, starting MCP server with SSE transport...');
+    
+    // For Apify Standby mode, we need to use SSE transport over HTTP
+    const sseModule = await import('@modelcontextprotocol/sdk/server/sse.js');
+    const SSEServerTransport = sseModule.SSEServerTransport;
+    const http = await import('http');
+    
+    const configValid = validateConfig();
+    if (!configValid) {
+      console.error('WARNING: Configuration is invalid. Gmail features will not work.');
+    }
+    
+    // Store active SSE transports
+    const transports = new Map<string, InstanceType<typeof SSEServerTransport>>();
+    
+    const httpServer = http.createServer(async (req, res) => {
+      const url = new URL(req.url || '/', `http://${req.headers.host}`);
+      
+      // CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      
+      if (req.method === 'OPTIONS') {
+        res.writeHead(200);
+        res.end();
+        return;
+      }
+      
+      // Health check endpoint
+      if (url.pathname === '/' || url.pathname === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok', server: 'gmail-mcp-server', version: '2.0.0' }));
+        return;
+      }
+      
+      // SSE endpoint for MCP
+      if (url.pathname === '/sse') {
+        console.log('New SSE connection request');
+        
+        const transport = new SSEServerTransport('/message', res);
+        const sessionId = crypto.randomUUID();
+        transports.set(sessionId, transport);
+        
+        res.on('close', () => {
+          console.log('SSE connection closed:', sessionId);
+          transports.delete(sessionId);
+        });
+        
+        await server.connect(transport);
+        console.log('SSE transport connected:', sessionId);
+        return;
+      }
+      
+      // Message endpoint for MCP
+      if (url.pathname === '/message' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', async () => {
+          try {
+            // Find the transport from the session (simplified - in production use session IDs)
+            const transport = Array.from(transports.values())[0];
+            if (transport) {
+              await transport.handlePostMessage(req, res, body);
+            } else {
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'No active SSE session' }));
+            }
+          } catch (error) {
+            console.error('Message handling error:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Internal server error' }));
+          }
+        });
+        return;
+      }
+      
+      // 404 for other paths
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Not found' }));
+    });
+    
+    const port = parseInt(process.env.ACTOR_STANDBY_PORT || process.env.PORT || '8080', 10);
+    httpServer.listen(port, () => {
+      console.log(`Gmail MCP Server (SSE) listening on port ${port}`);
+      console.log(`SSE endpoint: http://localhost:${port}/sse`);
+    });
+    
+    // Keep process alive
+    process.on('SIGTERM', () => {
+      console.log('Received SIGTERM, shutting down...');
+      httpServer.close();
+      process.exit(0);
+    });
+    
+  } else {
+    // Local development - use stdio transport
+    console.error('Gmail MCP Server v2.0 starting (stdio mode)...');
 
-  console.error('Gmail MCP Server v2.0 starting...');
+    const configValid = validateConfig();
+    if (!configValid) {
+      console.error('WARNING: Configuration is invalid. Gmail features will not work.');
+      console.error('Please provide Gmail credentials via .env file.');
+    }
 
-  const configValid = validateConfig();
-  if (!configValid) {
-    console.error('WARNING: Configuration is invalid. Gmail features will not work.');
-    console.error('Please provide Gmail credentials via Actor input or .env file.');
-  }
+    // Create stdio transport
+    const transport = new StdioServerTransport();
 
-  // Create stdio transport
-  const transport = new StdioServerTransport();
+    // Connect server to transport
+    await server.connect(transport);
 
-  // Connect server to transport
-  await server.connect(transport);
-
-  console.error('Gmail MCP Server is running!');
-  
-  // Keep alive for Apify standby mode
-  if (isApify) {
-    console.log('MCP Server ready for connections via Apify Standby mode');
+    console.error('Gmail MCP Server is running!');
   }
 }
 

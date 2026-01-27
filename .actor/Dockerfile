@@ -18,5 +18,5 @@ RUN ./node_modules/.bin/tsc
 # Remove dev dependencies to reduce image size
 RUN npm prune --omit=dev
 
-# Run the MCP server
-CMD ["node", "dist/server.js"]
+# Run the Actor
+CMD ["node", "dist/actor.js"]

@@ -1,14 +1,56 @@
 {
-    "title": "Gmail MCP Server",
+    "title": "Gmail Email Sender",
+    "description": "Send emails from Gmail via AI assistants. Configure your credentials once, then just say 'send email to john@example.com'",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
+        "action": {
+            "title": "Action",
+            "type": "string",
+            "description": "What to do: send_email, verify_connection, or check_status",
+            "default": "send_email",
+            "enum": ["send_email", "verify_connection", "check_status"],
+            "sectionCaption": "Email Action",
+            "sectionDescription": "Choose what action to perform"
+        },
+        "to": {
+            "title": "To (Recipient)",
+            "type": "string",
+            "description": "Recipient email address",
+            "editor": "textfield"
+        },
+        "subject": {
+            "title": "Subject",
+            "type": "string",
+            "description": "Email subject line",
+            "editor": "textfield"
+        },
+        "body": {
+            "title": "Body",
+            "type": "string",
+            "description": "Email body content",
+            "editor": "textarea"
+        },
+        "cc": {
+            "title": "CC",
+            "type": "string",
+            "description": "Optional: CC recipients (comma-separated)",
+            "editor": "textfield"
+        },
+        "bcc": {
+            "title": "BCC",
+            "type": "string",
+            "description": "Optional: BCC recipients (comma-separated)",
+            "editor": "textfield"
+        },
         "gmailClientId": {
             "title": "Gmail Client ID",
             "type": "string",
             "description": "Your Gmail OAuth Client ID from Google Cloud Console",
             "editor": "textfield",
-            "isSecret": true
+            "isSecret": true,
+            "sectionCaption": "Gmail Credentials (Set Once)",
+            "sectionDescription": "Enter your Gmail OAuth credentials. Get these from Google Cloud Console."
         },
         "gmailClientSecret": {
             "title": "Gmail Client Secret", 
@@ -20,31 +62,15 @@
         "gmailRefreshToken": {
             "title": "Gmail Refresh Token",
             "type": "string",
-            "description": "Your Gmail OAuth Refresh Token (get it by running auth script locally first)",
+            "description": "Your Gmail OAuth Refresh Token from OAuth Playground",
             "editor": "textfield",
             "isSecret": true
         },
         "gmailUserEmail": {
-            "title": "Gmail Email Address",
+            "title": "Your Gmail Address",
             "type": "string",
-            "description": "Your Gmail email address that will send emails",
+            "description": "Your Gmail email address (sender)",
             "editor": "textfield"
-        },
-        "maxEmailsPerHour": {
-            "title": "Max Emails Per Hour",
-            "type": "integer",
-            "description": "Rate limit: maximum emails per hour",
-            "default": 10,
-            "minimum": 1,
-            "maximum": 50
-        },
-        "maxEmailsPerDay": {
-            "title": "Max Emails Per Day",
-            "type": "integer",
-            "description": "Rate limit: maximum emails per day",
-            "default": 50,
-            "minimum": 1,
-            "maximum": 200
         }
     },
     "required": ["gmailClientId", "gmailClientSecret", "gmailRefreshToken", "gmailUserEmail"]
