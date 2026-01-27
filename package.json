@@ -2,16 +2,18 @@
   "name": "gmail-mcp-server",
   "version": "2.0.0",
   "description": "MCP server for sending emails via Gmail API. Works with ChatGPT, Claude, Cursor.",
-  "main": "dist/server.js",
+  "main": "dist/railway-server.js",
   "bin": {
     "gmail-mcp-server": "dist/server.js"
   },
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "tsx watch src/server.ts",
+    "start": "node dist/railway-server.js",
+    "start:local": "node dist/server.js",
+    "dev": "tsx watch src/railway-server.ts",
     "auth": "tsx src/auth.ts",
+    "test": "tsx src/test-gmail.ts",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
