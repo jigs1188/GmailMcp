@@ -1,12 +1,51 @@
-# 📧 Gmail MCP Server - Send Emails from Any AI Assistant
+# 📧 Gmail MCP Server - Control your Inbox with AI
 
-**Send emails directly from ChatGPT, Claude, Cursor, and any MCP-compatible AI!**
-
-Just say *"Send an email to john@example.com saying I'll be late"* — and it sends instantly from your Gmail account.
+Gmail MCP Server is a powerful bridge between your AI assistant (ChatGPT, Claude, Cursor) and your Gmail account. It allows AI models to read, compose, and send emails securely using the Model Context Protocol. By hosting this on Railway, you get a 24/7 cloud-based email automation engine that works everywhere.
 
 ---
 
-## ⚡ What This Does
+## 🚀 Deploy on Railway
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/jigs1188/MCP-mail)
+
+## About Hosting Gmail MCP Sever
+
+Deploying the Gmail MCP Server on Railway involves setting up a persistent Node.js environment that communicates with Google's OAuth 2.0 servers. Railway simplifies this by providing a managed container service that handles the server lifecycle, SSL encryption, and environment variable management. 
+
+When you deploy, Railway builds your TypeScript code into a production-ready JavaScript bundle and exposes an SSE (Server-Sent Events) endpoint. This endpoint allows AI clients like ChatGPT to securely send JSON-RPC requests to your server. By using Railway, you avoid the hassle of local port forwarding (like Ngrok) and ensure your email tools are available whenever you need them, without keeping your laptop running.
+
+## Common Use Cases
+
+- **AI Follow-ups:** Tell ChatGPT to summarize a thread and send a follow-up email automatically.
+- **Automated Reporting:** Connect your AI to data sources and have it draft and send weekly progress emails to your team.
+- **Smart Inbox Management:** Use AI to filter, categorize, or respond to common inquiries directly through a chat interface.
+
+## Dependencies for Gmail MCP Sever Hosting
+
+- **Google Cloud Console Account:** To create OAuth 2.0 credentials (Client ID and Secret).
+- **Railway Account:** For cloud hosting and server management.
+
+### Deployment Dependencies
+
+- [Google OAuth Playground](https://developers.google.com/oauthplayground) (Required to generate your persistent Refresh Token)
+- [Railway Dashboard](https://railway.app/dashboard)
+- [Model Context Protocol (MCP) Guide](https://modelcontextprotocol.io)
+
+---
+
+## ⚠️ Important: AI Model Support (Read Before Buying)
+
+| AI Assistant | Tier Required | Platform |
+|--------------|---------------|----------|
+| **ChatGPT**  | **Plus / Team / Enterprise** | Web & Desktop |
+| **Claude**   | **Free or Paid** | **Desktop App Only** |
+| **Cursor**   | **Free or Paid** | IDE (Desktop) |
+
+**Note for ChatGPT users:** You **must** have a paid subscription (ChatGPT Plus) to add custom MCP servers via the "Connectors" setting. Claude users can use this for free, but only via the Claude Desktop application.
+
+---
+
+## ⚡ Features
 
 | Feature | Description |
 |---------|-------------|
