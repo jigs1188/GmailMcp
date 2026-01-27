@@ -9,14 +9,9 @@
     "startCommand": "node dist/railway-server.js",
     "healthcheckPath": "/",
     "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 3
-  },
-  "environments": {
-    "production": {
-      "scaling": {
-        "maxInstances": 1,
-        "minInstances": 1
-      }
-    }
+    "restartPolicyMaxRetries": 3,
+    "numReplicas": 1
   }
 }
+  
+
