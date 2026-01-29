@@ -176,6 +176,60 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ChatGPT OpenAPI Spec
+  if (url.pathname === '/openapi.json' && req.method === 'GET') {
+    const host = req.headers.host || `localhost:${config.port}`;
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    
+    const spec = {
+      openapi: '3.1.0',
+      info: { title: 'Gmail AI Assistant', version: '1.0.0', description: 'API for sending emails via Gmail' },
+      servers: [{ url: `${protocol}://${host}` }],
+      paths: {
+        '/api/send-email': {
+          post: {
+            operationId: 'send_email',
+            summary: 'Send an email',
+            requestBody: {
+              required: true,
+              content: { 'application/json': { schema: {
+                type: 'object',
+                properties: {
+                  to: { type: 'string', description: 'Recipient email' },
+                  subject: { type: 'string', description: 'Email subject' },
+                  body: { type: 'string', description: 'Email body' }
+                },
+                required: ['to', 'subject', 'body']
+              }}}
+            },
+            responses: { '200': { description: 'Success' } }
+          }
+        }
+      }
+    };
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(spec));
+    return;
+  }
+
+  // REST API for ChatGPT
+  if (url.pathname === '/api/send-email' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        const data = JSON.parse(body);
+        const result = await sendEmail(data.to, data.subject, data.body);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (e: any) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
   // SSE endpoint for MCP
   if (url.pathname === '/sse' && req.method === 'GET') {
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
