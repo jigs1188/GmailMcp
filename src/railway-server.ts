@@ -170,6 +170,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 
       status: 'ok', 
+      version: '2.1.0',
       server: 'gmail-mcp-server',
       email: config.userEmail ? config.userEmail.substring(0, 5) + '***' : 'not configured'
     }));
